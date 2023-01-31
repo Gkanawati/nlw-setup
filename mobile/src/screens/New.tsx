@@ -6,10 +6,14 @@ import { CheckBox } from '../components/CheckBox'
 import { Feather } from '@expo/vector-icons'
 import colors from 'tailwindcss/colors'
 import { api } from '../lib/axios'
+import { useNavigation } from '@react-navigation/native'
 
 const availableWeekDays = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado']
 
 export function New() {
+
+  const { goBack } = useNavigation()
+
   const [title, setTitle] = useState('')
 
   const [weekDays, setWeekDays] = useState<number[]>([])
@@ -26,7 +30,7 @@ export function New() {
 
     try {
       if (title.trim() === '') {
-        Alert.alert('Novo hábito', 'Informe o nome do hábito.')
+        return Alert.alert('Novo hábito', 'Informe o nome do hábito.')
       }
 
       await api.post('/habits', {
@@ -38,10 +42,10 @@ export function New() {
       setWeekDays([])
 
       Alert.alert('Novo hábito', 'Hábito criado com sucesso!')
+      goBack()
     } catch (error) {
       console.log(error)
       Alert.alert('Ops!', 'Não foi possível criar o novo hábito.')
-
     }
   }
 
